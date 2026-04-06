@@ -1,0 +1,204 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'DM Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Design tokens ─── */
+:root {
+  --clr-primary: 238 66% 55%;
+  --clr-primary-soft: 238 80% 96%;
+  --clr-success: 160 84% 39%;
+  --clr-warning: 38 92% 50%;
+  --clr-danger: 0 72% 51%;
+  --clr-surface: 0 0% 100%;
+  --clr-surface-alt: 220 14% 96%;
+  --clr-border: 220 13% 91%;
+  --clr-text-primary: 222 47% 11%;
+  --clr-text-secondary: 215 16% 47%;
+  --nav-h: 4rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.125rem;
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.04);
+}
+
+/* ─── Base ─── */
+html {
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ─── Custom scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ─── Focus ring ─── */
+*:focus-visible {
+  outline: 2px solid hsl(var(--clr-primary) / 0.5);
+  outline-offset: 2px;
+}
+
+/* ─── Animations ─── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseSoft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.anim-fade-in   { animation: fadeIn 0.35s ease-out both; }
+.anim-slide-up  { animation: slideUp 0.4s ease-out both; }
+.anim-slide-down{ animation: slideDown 0.3s ease-out both; }
+.anim-scale-in  { animation: scaleIn 0.3s ease-out both; }
+.anim-pulse     { animation: pulseSoft 2s ease-in-out infinite; }
+
+/* Stagger children */
+.stagger > :nth-child(1) { animation-delay: 0ms; }
+.stagger > :nth-child(2) { animation-delay: 50ms; }
+.stagger > :nth-child(3) { animation-delay: 100ms; }
+.stagger > :nth-child(4) { animation-delay: 150ms; }
+.stagger > :nth-child(5) { animation-delay: 200ms; }
+.stagger > :nth-child(6) { animation-delay: 250ms; }
+.stagger > :nth-child(7) { animation-delay: 300ms; }
+.stagger > :nth-child(8) { animation-delay: 350ms; }
+
+/* ─── Shimmer loading skeleton ─── */
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+/* ─── Spinner ─── */
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-top-color: hsl(var(--clr-primary));
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ─── Glass card ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Card base ─── */
+.card {
+  border-radius: var(--radius-xl);
+  border: 1px solid hsl(var(--clr-border));
+  background: hsl(var(--clr-surface));
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ─── Badge base ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* ─── Smooth transitions on interactive elements ─── */
+button, a, select, input, textarea {
+  transition: all 0.15s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: hsl(var(--clr-primary)) !important;
+  box-shadow: 0 0 0 3px hsl(var(--clr-primary) / 0.12) !important;
+}
+
+/* ─── Table improvements ─── */
+.table-premium tbody tr {
+  transition: background-color 0.15s ease;
+}
+.table-premium tbody tr:hover {
+  background-color: hsl(220 14% 96% / 0.7);
+}
+
+/* ─── Left severity stripe ─── */
+.severity-stripe-critical { border-left: 3px solid #ef4444; }
+.severity-stripe-high     { border-left: 3px solid #f97316; }
+.severity-stripe-medium   { border-left: 3px solid #eab308; }
+.severity-stripe-low      { border-left: 3px solid #94a3b8; }
+
+/* ─── Tooltip ─── */
+.tooltip-custom {
+  background: hsl(222 47% 11%);
+  color: white;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+}
