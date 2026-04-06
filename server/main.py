@@ -42,6 +42,18 @@ async def broadcast(message: str = "refresh"):
 async def startup_event():
     """Initializes the SQLite database when the server starts."""
     db.init_db()
+    
+    # Auto-seed basic employees if empty so the UI and routing works immediately
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM employees")
+    if cursor.fetchone()[0] == 0:
+        now = datetime.utcnow().isoformat()
+        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (str(uuid.uuid4()), "Alex System", "alex@internal", "IT", "Agent", '["access", "software"]', "Online", now))
+        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (str(uuid.uuid4()), "Sarah HR", "sarah@internal", "HR", "Agent", '["payroll", "benefits", "reimbursement"]', "Online", now))
+        conn.commit()
+    conn.close()
+
     # Start the background escalation task
     asyncio.create_task(run_escalation_loop())
     # Start the 30-day trash cleanup task
