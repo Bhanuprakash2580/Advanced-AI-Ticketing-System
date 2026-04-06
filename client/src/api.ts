@@ -1,4 +1,4 @@
-const base = '';
+const base = import.meta.env.VITE_API_URL || '';
 
 async function handleResponse(r: Response) {
   if (!r.ok) {
