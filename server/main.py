@@ -49,8 +49,24 @@ async def startup_event():
     cursor.execute("SELECT COUNT(*) FROM employees")
     if cursor.fetchone()[0] == 0:
         now = datetime.utcnow().isoformat()
-        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (str(uuid.uuid4()), "Alex System", "alex@internal", "IT", "Agent", '["access", "software"]', "Online", now))
-        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (str(uuid.uuid4()), "Sarah HR", "sarah@internal", "HR", "Agent", '["payroll", "benefits", "reimbursement"]', "Online", now))
+        emp1_id = str(uuid.uuid4())
+        emp2_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (emp1_id, "Alex System", "alex@internal", "IT", "Agent", '["access", "software"]', "Online", now))
+        cursor.execute("INSERT INTO employees (id, name, email, department, role, skill_tags, availability, active, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)", (emp2_id, "Sarah HR", "sarah@internal", "HR", "Agent", '["payroll", "benefits", "reimbursement"]', "Online", now))
+        
+        # Also seed some dummy tickets so the Dashboard/Analytics aren't blank
+        t1_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO tickets (id, subject, body, requester_email, status, category, severity, effective_severity, sentiment, recommended_resolution_path, confidence_score, estimated_resolution_minutes, suggested_department, assigned_department, assigned_employee_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                       (t1_id, "Need access to GitHub repository", "I just joined the frontend team and I need access to the main web-app repo.", "new.hire@company.internal", "Assigned", "Access/Permissions", "Medium", "Medium", "Neutral", "Grant repository permissions via Identity Provider", 0.95, 15, "IT", "IT", emp1_id, now, now))
+        
+        t2_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO tickets (id, subject, body, requester_email, status, auto_resolved, category, severity, effective_severity, sentiment, recommended_resolution_path, confidence_score, estimated_resolution_minutes, assigned_department, resolved_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                       (t2_id, "How do I reset my password?", "I forgot my portal password, can you help me reset it?", "user@company.internal", "Resolved", 1, "Account Management", "Low", "Low", "Neutral", "Automated password reset flow", 0.99, 1, "IT", now, now, now))
+
+        t3_id = str(uuid.uuid4())
+        cursor.execute("INSERT INTO tickets (id, subject, body, requester_email, status, category, severity, effective_severity, sentiment, recommended_resolution_path, confidence_score, estimated_resolution_minutes, suggested_department, assigned_department, assigned_employee_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                       (t3_id, "Missing last month's reimbursement", "I submitted a travel expense report on the 10th but it hasn't been paid.", "sales.rep@company.internal", "New", "Billing/Finance", "High", "High", "Frustrated", "Verify expense report and fast-track payment", 0.88, 120, "HR", "HR", None, now, now))
+
         conn.commit()
     conn.close()
 
